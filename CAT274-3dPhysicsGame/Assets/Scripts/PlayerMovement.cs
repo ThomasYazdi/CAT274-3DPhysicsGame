@@ -7,8 +7,6 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rb;
     public float speed = 8.5f;
 
-    public int score = 0;
-
 
     // Start is called before the first frame update
     void Start()
@@ -40,13 +38,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.tag == "Treasure")
         {
-            score++;
+            GameManager.Instance.Score++;
             Destroy(collision.gameObject);
         }
 
         if (collision.gameObject.tag == "Enemy")
         {
-            score--;
+            GameManager.Instance.Score--;
             Destroy(collision.gameObject);
         }
     }
