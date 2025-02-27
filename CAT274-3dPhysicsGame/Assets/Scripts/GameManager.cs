@@ -1,32 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using TMPro;
-using System.IO;
-using UnityEngine.SceneManagement;
 using System;
 
 
 public class GameManager : MonoBehaviour
 {
-
-    private int score;
     public static GameManager Instance;
+    //public PlayerMovement myPlayer; no longer needed, we change the score differently now
+    private int score = 0;
 
-    public TextMeshProUGUI txtPlayerScore;
-    public TextMeshProUGUI txtHighScore;
+    public TextMeshProUGUI highScoreDisplay;
+    public TextMeshProUGUI scoreDisplay;
 
-    public float endTime = 0.0f;
+    public float endTime = 15.0f;
+
     const string DIR_DATA = "/Data/";
-    const string FILE_HIGH_SCORE = "/highScore/";
+    const string FILE_HIGH_SCORE = "highScore.txt";
     string PATH_HIGH_SCORE;
+
+    public const string PREF_HIGH_SCORE = "hsScore";
 
     public int Score
     {
         get { return score; }
-        set 
+        set
         {
             score = value;
+            Debug.Log("Score Changed");
             if (score > HighScore)
             {
                 HighScore = score;
@@ -37,16 +40,23 @@ public class GameManager : MonoBehaviour
     int highScore;
     public int HighScore
     {
-        get { return highScore; }
+        get
+        {
+            //highScore = PlayerPrefs.GetInt(PREF_HIGH_SCORE);
+            return highScore;
+        }
         set
         {
             highScore = value;
+
             Directory.CreateDirectory(Application.dataPath + DIR_DATA);
             File.WriteAllText(PATH_HIGH_SCORE, "" + HighScore);
+
+            //PlayerPrefs.SetInt(PREF_HIGH_SCORE, highScore);
         }
+
     }
 
-    // Start is called before the first frame update
     private void Awake()
     {
         if (Instance == null)
@@ -59,11 +69,14 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    // Start is called before the first frame update
     void Start()
     {
         PATH_HIGH_SCORE = Application.dataPath + DIR_DATA + FILE_HIGH_SCORE;
-        
-        
+        highScoreDisplay.enabled = false;
+        //myPlayer = FindObjectOfType<PlayerMovement>(); no longer used to update score
+
         if (File.Exists(PATH_HIGH_SCORE))
         {
             HighScore = Int32.Parse(File.ReadAllText(PATH_HIGH_SCORE));
@@ -73,15 +86,13 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        txtPlayerScore.text = "Score: " + Score;
-        txtHighScore.text = "High Score: " + HighScore;
+        scoreDisplay.text = "Score: " + Score;
+        highScoreDisplay.text = "High Score: " + HighScore;
 
-        endTime += Time.deltaTime;
-
-        if (endTime >= 10.0f)
+        endTime -= Time.deltaTime; //subtrating delta time from time variable to count down time to 0
+        if (endTime <= 0.0f)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            highScoreDisplay.enabled = true;
         }
-
     }
 }

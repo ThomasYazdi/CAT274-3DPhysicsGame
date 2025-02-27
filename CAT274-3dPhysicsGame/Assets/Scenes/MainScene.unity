@@ -579,7 +579,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a4f2971f1cd54a4f8a11e51f2b85ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  speed: 2
+  score: 0
 --- !u!54 &911734722
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1154,8 +1155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aef9a1f9dbdcdfc418636bf11843198d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  txtPlayerScore: {fileID: 1603180229}
-  txtHighScore: {fileID: 333054282}
+  highScoreDisplay: {fileID: 333054282}
+  scoreDisplay: {fileID: 1603180229}
   endTime: 0
 --- !u!4 &1981556831
 Transform:
